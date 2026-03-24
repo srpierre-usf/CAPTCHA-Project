@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Misuse | Puzzle Verification</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<main class="captcha-card" role="main">
+
+  <!-- Header -->
+  <header class="captcha-header">
+    <div class="header-title">Modern Misuse</div>
+    <div class="header-sub">Puzzle Verification</div>
+  </header>
+
+  <!-- Body -->
+  <div class="captcha-body">
+
+    <p class="instruction">
+      Spell the word correctly for verification.<br>
+      Left → Right, Top → Bottom
+    </p>
+
+    <!-- Target word with accessible label -->
+    <div class="target-word" id="target-display" aria-label="Target word" aria-live="polite">LOADING</div>
+
+    <!-- 3×3 Grid -->
+    <div class="grid-wrapper">
+      <div
+        class="puzzle-grid"
+        id="puzzle-grid"
+        role="grid"
+        aria-label="Sliding letter puzzle"
+      ></div>
+    </div>
+
+    <!-- Keyboard controls hint -->
+    <div class="kbd-hint" aria-label="Keyboard controls">
+      <div class="kbd-group">
+        <div class="kbd-label">Arrow keys</div>
+        <div class="kbd-row"><div class="k" id="k-up">↑</div></div>
+        <div class="kbd-row">
+          <div class="k" id="k-left">←</div>
+          <div class="k" id="k-down">↓</div>
+          <div class="k" id="k-right">→</div>
+        </div>
+      </div>
+      <div class="kbd-divider"></div>
+      <div class="kbd-group">
+        <div class="kbd-label">W A S D</div>
+        <div class="kbd-row"><div class="k" id="k-w">W</div></div>
+        <div class="kbd-row">
+          <div class="k" id="k-a">A</div>
+          <div class="k" id="k-s">S</div>
+          <div class="k" id="k-d">D</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Move counter -->
+    <div class="move-counter">
+      Moves: <span id="move-count">0</span>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-reset"  id="btn-reset"  type="button">↺ New Word</button>
+      <button class="btn btn-verify" id="btn-verify" type="button">Verify →</button>
+    </div>
+
+  </div>
+
+  <!-- Success overlay -->
+  <div
+    class="success-overlay"
+    id="success-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="s-word"
+    aria-describedby="s-def"
+  >
+    <div class="s-check" aria-hidden="true">✓</div>
+    <div class="s-word" id="s-word"></div>
+    <div class="s-verified">Verified</div>
+    <div class="s-divider" aria-hidden="true"></div>
+    <div class="s-def-label">Modern Misuse</div>
+    <div class="s-def" id="s-def"></div>
+    <button class="s-continue" id="s-continue" type="button">Continue →</button>
+  </div>
+
+</main>
+
+<script src="puzzle.js"></script>
+</body>
+</html>

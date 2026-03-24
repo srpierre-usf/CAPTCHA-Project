@@ -1,0 +1,401 @@
+/* ── FONTS ──────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Paris 2024';
+  src: url('fonts/Paris2024-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+/* ── RESET & ROOT ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:      #1400ff;
+  --blue-dark: #0f00cc;
+  --white:     #ffffff;
+  --grey-bg:   #d9d9d9;
+  --body-bg:   #f0f0f0;
+  --black:     #111111;
+  --tile:      90px;
+  --gap:       6px;
+}
+
+body {
+  background-image: url(images/CAPTCHA-BACKGROUND.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+/* ── CARD ───────────────────────────────────────────────────────────────────── */
+.captcha-card {
+  background: var(--white);
+  width: 800px;
+  border: 4px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────────────────────── */
+.captcha-header {
+  background: var(--blue);
+  padding: 22px 28px 18px;
+}
+
+.header-title {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.header-sub {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+/* ── BODY ───────────────────────────────────────────────────────────────────── */
+.captcha-body {
+  padding: 22px 28px 26px;
+}
+
+/* ── INSTRUCTIONS ───────────────────────────────────────────────────────────── */
+.instruction {
+  font-family: 'Paris 2024', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* ── TARGET WORD ────────────────────────────────────────────────────────────── */
+.target-word {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 46px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+  text-align: center;
+  margin-bottom: 18px;
+  line-height: 1;
+}
+
+/* ── GRID ───────────────────────────────────────────────────────────────────── */
+.grid-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, var(--tile));
+  grid-template-rows:    repeat(3, var(--tile));
+  gap: var(--gap);
+  background: var(--grey-bg);
+  padding: 8px;
+}
+
+/* ── TILES ──────────────────────────────────────────────────────────────────── */
+.tile {
+  width: var(--tile);
+  height: var(--tile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 42px;
+  text-transform: uppercase;
+  user-select: none;
+  position: relative;
+  transition: outline 0.08s, opacity 0.1s, transform 0.08s, filter 0.1s;
+}
+
+/* Every letter tile: blue background, white text, pointer */
+.tile.letter {
+  background: var(--blue);
+  color: var(--white);
+  cursor: pointer;
+}
+
+/* Hover: subtle brighten */
+.tile.letter:hover {
+  filter: brightness(1.12);
+  transform: scale(1.04);
+  z-index: 2;
+}
+
+/* SELECTED — white inset border */
+.tile.letter.selected {
+  outline: 4px solid var(--white);
+  outline-offset: -6px;
+  filter: brightness(1.2);
+  z-index: 3;
+}
+
+/* Tile in correct reading-order position — slightly dimmed to distinguish */
+.tile.letter.correct {
+  opacity: 0.72;
+}
+
+/* Selected + correct — restore full brightness */
+.tile.letter.selected.correct {
+  opacity: 1;
+}
+
+/* Empty slot — plain grey */
+.tile.empty {
+  background: var(--grey-bg);
+  cursor: default;
+}
+
+/* Empty slot adjacent to selected tile — shows valid move destination */
+.tile.empty.empty-target {
+  background: rgba(20, 0, 255, 0.12);
+  outline: 2px dashed var(--blue);
+  outline-offset: -4px;
+}
+
+/* ── KEYBOARD HINT ──────────────────────────────────────────────────────────── */
+.kbd-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.kbd-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.kbd-label {
+  font-family: 'Paris 2024', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 3px;
+}
+
+.kbd-row { display: flex; gap: 3px; }
+
+.k {
+  width: 28px;
+  height: 28px;
+  background: var(--white);
+  border: 2px solid #bbb;
+  box-shadow: 0 2px 0 #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #444;
+  border-radius: 4px;
+  transition: background 0.1s, color 0.1s, transform 0.08s, box-shadow 0.08s;
+}
+
+.k.active {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue-dark);
+  transform: translateY(2px);
+  box-shadow: 0 0 0 var(--blue-dark);
+}
+
+.kbd-divider {
+  width: 1px;
+  height: 52px;
+  background: #ddd;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────────────────────── */
+.btn-row {
+  display: flex;
+  gap: 0;
+  justify-content: space-between;
+}
+
+.btn {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  padding: 13px 28px;
+  transition: background 0.12s, color 0.12s, transform 0.08s;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-reset  { background: var(--grey-bg); color: var(--black); }
+.btn-reset:hover  { background: #c8c8c8; }
+.btn-verify { background: var(--blue);    color: var(--white); }
+.btn-verify:hover { background: var(--blue-dark); }
+
+/* ── SUCCESS OVERLAY ────────────────────────────────────────────────────────── */
+.success-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  z-index: 20;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 36px 40px;
+  overflow-y: auto;
+}
+
+.success-overlay.show { display: flex; }
+
+.s-check {
+  font-size: 48px;
+  color: var(--white);
+  line-height: 1;
+}
+
+.s-word {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 42px;
+  letter-spacing: 0.14em;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.s-verified {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Divider line between verified section and definition */
+.s-divider {
+  width: 60px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 4px 0;
+}
+
+/* "Modern Misuse" label above the definition */
+.s-def-label {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The definition text itself */
+.s-def {
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  max-width: 580px;
+}
+
+/* Continue button */
+.s-continue {
+  margin-top: 8px;
+  font-family: 'Paris 2024', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  color: var(--white);
+  padding: 10px 28px;
+  transition: background 0.12s, border-color 0.12s, transform 0.08s;
+}
+
+.s-continue:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--white);
+}
+
+.s-continue:active { transform: scale(0.97); }
+
+/* ── MOVE COUNTER ───────────────────────────────────────────────────────────── */
+.move-counter {
+  font-family: 'Paris 2024', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #aaa;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.move-counter span {
+  color: var(--blue);
+  font-weight: 900;
+  font-size: 15px;
+}
+
+/* ── FOCUS RINGS — keyboard accessibility ───────────────────────────────────── */
+.tile.letter:focus-visible {
+  outline: 4px solid var(--white);
+  outline-offset: -6px;
+}
+
+.btn:focus-visible,
+.s-continue:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ── CARD SHADOW — lifts card off the background image ──────────────────────── */
+.captcha-card {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ── SHAKE ANIMATION ────────────────────────────────────────────────────────── */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-8px); }
+  35%  { transform: translateX(8px); }
+  55%  { transform: translateX(-5px); }
+  75%  { transform: translateX(4px); }
+  90%  { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+.shake { animation: shake 0.42s ease; }
